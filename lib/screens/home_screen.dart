@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:we_chat_app/screens/profile_screen.dart';
 import 'package:we_chat_app/widgets/chat_user_card.dart';
 
 import '../apis/apis.dart';

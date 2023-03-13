@@ -5,7 +5,6 @@ import 'package:we_chat_app/screens/auth/login_screen.dart';
 import 'package:we_chat_app/screens/home_screen.dart';
 import 'package:we_chat_app/screens/profile_screen.dart';
 import 'package:we_chat_app/screens/splash_screen.dart';
-import 'package:we_chat_app/widgets/chat_user_card.dart';
 
 import '../../apis/apis.dart';
 import '../../screens/chat_screen.dart';

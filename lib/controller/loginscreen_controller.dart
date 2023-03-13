@@ -8,7 +8,6 @@ import '../apis/apis.dart';
 import '../helper/auth_helper.dart';
 import '../helper/dialogs.dart';
 import '../helper/routes/routes_name.dart';
-import '../screens/home_screen.dart';
 
 class LoginScreenController {
   static void handleGoogleBtn(BuildContext context) {

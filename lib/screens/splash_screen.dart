@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 
 import '../apis/apis.dart';
 import '../helper/routes/routes_name.dart';
-import '../screens/auth/login_screen.dart';
-import '../screens/home_screen.dart';
 import '../../main.dart';
 
 class SplashScreen extends StatefulWidget {

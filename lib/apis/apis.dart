@@ -85,8 +85,7 @@ class APIs {
     log('Extension: $extension');
 
     //store file
-    final ref =
-        await storage.ref().child('profile_picture/${user.uid}.$extension');
+    final ref = storage.ref().child('profile_picture/${user.uid}.$extension');
     //upload
     await ref
         .putFile(file, SettableMetadata(contentType: 'image/$extension'))

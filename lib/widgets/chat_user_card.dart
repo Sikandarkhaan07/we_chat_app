@@ -29,7 +29,6 @@ class _ChatUserCardState extends State<ChatUserCard> {
             ),
             child: InkWell(
               onTap: () {
-                print('user data: ${widget.user[index]}');
                 var x = widget.user[index];
                 Navigator.pushNamed(
                   context,
