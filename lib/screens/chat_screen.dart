@@ -1,10 +1,11 @@
-import 'dart:developer';
-
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 import '../apis/messages_apis.dart';
 import '../controller/chat_screen_controller.dart';
 import '../controller/message_card_controller.dart';
+import '../main.dart';
 import '../models/chat_user.dart';
 import '../models/message.dart';
 import '../widgets/message_card.dart';
@@ -49,7 +50,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           MessageCardController.messageList = data
                               .map((e) => Message.fromJson(e.data()))
                               .toList();
-                          log('snapshot data: ${MessageCardController.messageList}');
                           return ListView.builder(
                               itemCount:
                                   MessageCardController.messageList.length,
@@ -70,6 +70,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               ChatScreenController.chatInput(widget.user),
+              SizedBox(
+                height: mq.height * 0.35,
+                child: EmojiPicker(
+                  textEditingController: ChatScreenController.textController,
+                  config: Config(
+                    columns: 7,
+                    emojiSizeMax: 32 *
+                        (foundation.defaultTargetPlatform == TargetPlatform.iOS
+                            ? 1.30
+                            : 1.0),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

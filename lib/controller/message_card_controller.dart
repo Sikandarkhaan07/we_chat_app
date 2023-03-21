@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/apis/messages_apis.dart';
+import 'package:we_chat_app/helper/date_utility.dart';
 import '../main.dart';
 import '../models/message.dart';
 
@@ -6,7 +10,11 @@ class MessageCardController {
   static List<Message> messageList = [];
 
   //USER MESSAGE
-  static Widget blueMessage(Message message) {
+  static Widget blueMessage(Message message, BuildContext context) {
+    if (message.read.isEmpty) {
+      MessagesAPIs.updateMessageReadStatus(message);
+      log('Message updated');
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -34,7 +42,7 @@ class MessageCardController {
         Padding(
           padding: EdgeInsets.only(right: mq.width * 0.03),
           child: Text(
-            message.sent,
+            DateUtility.getDate(context: context, time: message.sent),
             style: const TextStyle(color: Colors.black54, fontSize: 13),
           ),
         ),
@@ -43,22 +51,23 @@ class MessageCardController {
   }
 
   //OTHER USER MESSAGE
-  static Widget greenMessage(Message message) {
+  static Widget greenMessage(Message message, BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         //time
         Row(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: mq.width * 0.03, right: 2),
-              child: const Icon(
-                Icons.done_all_rounded,
-                color: Colors.lightBlue,
+            if (message.read.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.only(left: mq.width * 0.03, right: 2),
+                child: const Icon(
+                  Icons.done_all_rounded,
+                  color: Colors.lightBlue,
+                ),
               ),
-            ),
             Text(
-              message.sent,
+              DateUtility.getDate(context: context, time: message.sent),
               style: const TextStyle(color: Colors.black54, fontSize: 13),
             ),
           ],

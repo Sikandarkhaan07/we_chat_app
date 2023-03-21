@@ -10,6 +10,9 @@ class ChatScreenController {
   //handle text input field
   static final textController = TextEditingController();
 
+  //variable for storing emoji value
+  bool showEmoji = false;
+
   //app bar for chat screen
   static Widget appBar(ChatUser user, BuildContext context) {
     return InkWell(
