@@ -28,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
         statusBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: Colors.transparent,
       ));
-      log('User splash: ${APIs.auth.currentUser}');
       if (APIs.auth.currentUser != null) {
         Navigator.pushReplacementNamed(context, RoutesName.homeScreen);
       } else {

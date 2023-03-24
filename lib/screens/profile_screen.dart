@@ -35,7 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('building profile screen......');
     return GestureDetector(
       //hiding keyword when click anywhere on screen
       onTap: () => FocusScope.of(context).unfocus(),

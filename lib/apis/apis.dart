@@ -40,6 +40,23 @@ class APIs {
     return (await fireStore.collection('users').doc(user.uid).get()).exists;
   }
 
+  //getting specific user info
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+      ChatUser user) {
+    return fireStore
+        .collection('users')
+        .where('id', isEqualTo: user.id)
+        .snapshots();
+  }
+
+  //update online status
+  static Future<void> updateActiveStatus(bool online) async {
+    fireStore.collection('users').doc(user.uid).update({
+      'is_online': online,
+      'last_active': DateTime.now().millisecondsSinceEpoch.toString()
+    });
+  }
+
   //create new user
   static Future<void> createUser() async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
@@ -51,7 +68,7 @@ class APIs {
       image: user.photoURL,
       isOnline: false,
       lastActive: time,
-      createdAt: DateTime.now().toIso8601String(),
+      createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
       pushToken: '',
       id: user.uid,
     );

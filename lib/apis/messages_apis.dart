@@ -1,4 +1,8 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../models/chat_user.dart';
 import '../models/message.dart';
@@ -10,11 +14,13 @@ class MessagesAPIs {
       ChatUser chatUser) {
     return APIs.fireStore
         .collection('chats/${getConversationID(chatUser.id!)}/messages/')
+        .orderBy('sent', descending: true)
         .snapshots();
   }
 
   //sending message
-  static Future<void> sendMessage(ChatUser chatUser, String msg) async {
+  static Future<void> sendMessage(
+      ChatUser chatUser, String msg, Type type) async {
     //taking unique time as a message id
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
@@ -27,7 +33,7 @@ class MessagesAPIs {
         msg: msg,
         read: '',
         toId: chatUser.id!,
-        type: Type.text,
+        type: type,
         fromId: APIs.user.uid,
         sent: time);
 
@@ -60,7 +66,9 @@ class MessagesAPIs {
 
   //get last message time
   static String getLastMessageTime(
-      {required BuildContext context, required String time}) {
+      {required BuildContext context,
+      required String time,
+      bool showYear = false}) {
     final DateTime sent = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
     final DateTime now = DateTime.now();
 
@@ -69,10 +77,12 @@ class MessagesAPIs {
         now.year == sent.year) {
       return TimeOfDay.fromDateTime(sent).format(context);
     }
-    return '${sent.day} ${_getMonth(sent)}';
+    return showYear
+        ? '${sent.day} ${getMonth(sent)} ${sent.year}'
+        : '${sent.day} ${getMonth(sent)}';
   }
 
-  static String _getMonth(DateTime date) {
+  static String getMonth(DateTime date) {
     switch (date.month) {
       case 1:
         return 'JAN';
@@ -101,5 +111,21 @@ class MessagesAPIs {
       default:
         return 'NA';
     }
+  }
+
+  static Future<void> sendChatImage(ChatUser user, File file) async {
+    final ext = file.path.split('.').last;
+
+    final ref = APIs.storage.ref().child(
+        'images/${getConversationID(user.id!)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+        .then((p0) {
+      log('Data Transfered: ${p0.bytesTransferred / 1000} kb');
+    });
+
+    final imageUrl = await ref.getDownloadURL();
+    await sendMessage(user, imageUrl, Type.image);
   }
 }

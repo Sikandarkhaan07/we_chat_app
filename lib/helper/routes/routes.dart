@@ -5,6 +5,7 @@ import 'package:we_chat_app/screens/auth/login_screen.dart';
 import 'package:we_chat_app/screens/home_screen.dart';
 import 'package:we_chat_app/screens/profile_screen.dart';
 import 'package:we_chat_app/screens/splash_screen.dart';
+import 'package:we_chat_app/screens/view_profile_screen.dart';
 
 import '../../apis/apis.dart';
 import '../../screens/chat_screen.dart';
@@ -30,6 +31,11 @@ class Routes {
         );
       case RoutesName.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case RoutesName.viewProfileScreen:
+        return MaterialPageRoute(
+            builder: (_) => ViewProfileScreen(
+                  user: settings.arguments as ChatUser,
+                ));
 
       default:
         return MaterialPageRoute(

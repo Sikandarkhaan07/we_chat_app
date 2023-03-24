@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:we_chat_app/apis/messages_apis.dart';
 import 'package:we_chat_app/helper/date_utility.dart';
+import 'package:we_chat_app/widgets/dailogs/profile_dailog.dart';
 
 import '../apis/apis.dart';
 import '../helper/routes/routes_name.dart';
@@ -33,6 +34,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
               vertical: 5,
             ),
             child: InkWell(
+              //navigate to message
               onTap: () {
                 var x = widget.user[index];
                 Navigator.pushNamed(
@@ -42,6 +44,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 );
               },
               child: StreamBuilder(
+                  //get last msg of user
                   stream: MessagesAPIs.getLastMessage(widget.user[index]),
                   builder: (context, snapshot) {
                     final data = snapshot.data?.docs;
@@ -50,27 +53,43 @@ class _ChatUserCardState extends State<ChatUserCard> {
                     }
 
                     return ListTile(
+                      //show user name
                       title: Text(widget.user[index].name ?? 'unknown'),
-                      // leading: const CircleAvatar(child: Icon(CupertinoIcons.person)),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: CachedNetworkImage(
-                          height: 50,
-                          width: 50,
-                          imageUrl: widget.user[index].image!,
-                          errorWidget: (context, url, error) =>
-                              const CircleAvatar(
-                            child: Icon(CupertinoIcons.person),
-                          ),
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
+                      //show user image
+                      leading: InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => ProfileDialog(
+                                    user: widget.user[index],
+                                  ));
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            height: 50,
+                            width: 50,
+                            imageUrl: widget.user[index].image!,
+                            errorWidget: (context, url, error) =>
+                                const CircleAvatar(
+                              child: Icon(CupertinoIcons.person),
+                            ),
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
                         ),
                       ),
+                      //show last message
                       subtitle: Text(
-                        _message != null ? _message!.msg : 'Hi there!',
+                        _message != null
+                            ? _message!.type == Type.image
+                                ? 'image'
+                                : _message!.msg
+                            : 'Hi there!',
                         maxLines: 1,
                       ),
+                      //show message time or green dot
                       trailing: _message == null
                           ? null
                           : _message!.read.isEmpty &&

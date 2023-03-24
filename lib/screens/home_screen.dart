@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_null_aware_operators
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:we_chat_app/widgets/chat_user_card.dart';
 
 import '../apis/apis.dart';
@@ -33,6 +35,21 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     //getting your info before loading screen
     APIs.getSelfInfo();
+
+    APIs.updateActiveStatus(true);
+
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (APIs.auth.currentUser != null) {
+        if (message.toString().contains('paused')) {
+          APIs.updateActiveStatus(false);
+        }
+        if (message.toString().contains('resumed')) {
+          APIs.updateActiveStatus(true);
+        }
+      }
+
+      return Future.value(message);
+    });
   }
 
   @override

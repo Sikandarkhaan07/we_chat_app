@@ -37,6 +37,7 @@ class AuthHelper {
 
   static void signOut(BuildContext context) async {
     Dialogs.showProgressBar(context);
+    APIs.updateActiveStatus(false);
     await APIs.auth.signOut().then(
       (value) async {
         await GoogleSignIn().signOut().then((value) {
@@ -44,6 +45,7 @@ class AuthHelper {
           Navigator.of(context).pop();
           //poping home screen
           Navigator.of(context).pop();
+          APIs.auth = FirebaseAuth.instance;
           //navigating to login screen
           Navigator.pushReplacementNamed(context, RoutesName.loginScreen);
         });
